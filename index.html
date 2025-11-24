@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Link Page</title>
+  <meta name="description" content="Professional link page — all links in one page" />
+  <link rel="icon" href="https://cdn.discordapp.com/attachments/698153490458869835/1442497502728294543/5845847435028469870_1.png?ex=6925a5fc&is=6924547c&hm=71ed67e3d26cac3d98cf2a7417885e247e99a21661edee7eaeccc397bcec7d8f&" type="image/png">
+  <style>
+    :root{
+      --bg1:#0f1724; --bg2:#0b1220;
+      --accent1: #7C3AED; --accent2: #06B6D4;
+      --glass: rgba(255,255,255,0.06);
+      --glass-2: rgba(255,255,255,0.04);
+      --text: #E6EEF8;
+      --muted: #A8B3C7;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent 8%),
+                  radial-gradient(900px 500px at 90% 90%, rgba(6,182,212,0.08), transparent 10%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex; align-items:center; justify-content:center; padding:40px;
+      text-align: left;
+    }
+
+    .card{
+      width:100%; max-width:520px; border-radius:20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      box-shadow: 0 10px 40px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px) saturate(120%);
+      padding:28px; position:relative; overflow:hidden;
+      transform: translateY(32px); opacity:0; transition: all .75s cubic-bezier(.2,.95,.2,1);
+    }
+
+    .card.show{ transform:none; opacity:1 }
+
+    .shape {
+      position:absolute; border-radius:50%;
+      filter: blur(30px); opacity:0.35; pointer-events:none;
+    }
+    .shape.a{ width:260px; height:260px; top:-70px; left:-80px; background:linear-gradient(45deg,var(--accent1),transparent); transform: rotate(12deg); }
+    .shape.b{ width:220px; height:220px; bottom:-60px; right:-80px; background:linear-gradient(135deg,var(--accent2),transparent); transform: rotate(-12deg); }
+
+    header{ display:flex; gap:16px; align-items:center; margin-bottom:18px; flex-direction: row; }
+    .avatar{
+      width:84px; height:84px; border-radius:16px; overflow:hidden; flex:0 0 84px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      transform: translateY(-6px); transition: transform .45s cubic-bezier(.2,.95,.2,1);
+    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .meta h1{ margin:0; font-size:20px; letter-spacing:0.2px }
+    .meta p{ margin:6px 0 0 0; color:var(--muted); font-size:13px }
+
+    .links{ display:grid; gap:12px; margin-top:6px; direction: ltr; }
+
+    .link-btn{
+      display:flex; align-items:center; gap:12px; padding:14px 16px; border-radius:12px;
+      background: linear-gradient(180deg,var(--glass), var(--glass-2)); 
+      border:1px solid rgba(255,255,255,0.03);
+      transition: 
+          transform .55s cubic-bezier(.18,.89,.32,1.28),
+          box-shadow .45s cubic-bezier(.18,.89,.32,1.28),
+          background .45s cubic-bezier(.18,.89,.32,1.28),
+          filter .35s ease;
+      cursor:pointer; text-decoration:none; color:var(--text);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.35);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .link-btn::before{
+      content:'';
+      position:absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: linear-gradient(120deg, rgba(255,255,255,0.12), rgba(255,255,255,0));
+      opacity:0; pointer-events:none;
+      transition: opacity .4s ease;
+    }
+    .link-btn:hover::before{ opacity:1; }
+
+    .link-btn:hover{
+      transform: translateY(-2px) translateX(0) scale(1.02);
+      background: linear-gradient(145deg, var(--accent1)33, var(--accent2)33);
+      box-shadow: 0 20px 50px rgba(2,6,23,0.75);
+      filter: brightness(1.05) saturate(1.1);
+    }
+
+    .link-left{
+      width:44px; height:44px; border-radius:10px; 
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); 
+      font-weight:700;
+      transition: transform .45s cubic-bezier(.18,.89,.32,1.28), filter .3s ease;
+    }
+
+    .link-btn:hover .link-left{
+      transform: scale(1.18);
+      filter: drop-shadow(0 0 6px var(--accent1));
+    }
+
+    .link-left img{ width:24px; height:24px; object-fit:contain; }
+
+    .link-title{ font-size:16px; margin:0 }
+    .link-sub{ font-size:12px; color:var(--muted); margin-top:2px }
+
+    .ripple{ position:absolute; border-radius:50%; transform:scale(0); background:rgba(255,255,255,0.06); animation:ripple .6s linear; pointer-events:none; }
+    @keyframes ripple{ to{ transform:scale(6); opacity:0 } }
+
+    footer{ margin-top:16px; text-align:center; color:var(--muted); font-size:13px }
+
+    @media (max-width:520px){
+      body{ padding:22px }
+      .card{ padding:18px; border-radius:16px }
+      .avatar{ width:68px; height:68px; border-radius:12px }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" id="card">
+    <div class="shape a" aria-hidden="true"></div>
+    <div class="shape b" aria-hidden="true"></div>
+
+    <header>
+      <div class="avatar" id="avatar"><img src="https://cdn.discordapp.com/attachments/698153490458869835/1442503840099209306/IMG_7803.png?ex=6925abe3&is=69245a63&hm=0c0b1caf95f6bdc4af1c20bf52985c398842f76e8f28bc4caf45ca565728faf0&" alt="avatar"></div>
+      <div class="meta">
+        <h1 id="displayName">Hassan00x</h1>
+        <p id="subtitle">00X Dimension</p>
+      </div>
+    </header>
+
+    <section class="links" id="linksContainer"></section>
+
+    <footer>
+      <small>Enjoy my nigga!!!</small>
+    </footer>
+  </main>
+
+  <script>
+    const profile = {
+      name: "Hassan00x",
+      subtitle: "00X",
+      avatar: "https://cdn.discordapp.com/attachments/698153490458869835/1442503840099209306/IMG_7803.png?ex=6925abe3&is=69245a63&hm=0c0b1caf95f6bdc4af1c20bf52985c398842f76e8f28bc4caf45ca565728faf0&",
+      accent1: "#7C3AED",
+      accent2: "#06B6D4"
+    };
+
+    const links = [
+      {title:"Spotify", subtitle:"Listen to sum real music, Bitch!", url:"https://open.spotify.com/user/31amjbswmbwnegrobbs5xp7uxw3e?si=qQZ0cRLlSgKSRC-a9XWnvA", icon:"https://cdn.discordapp.com/attachments/698153490458869835/1442505772180308139/250px-Spotify_icon.png?ex=6925adb0&is=69245c30&hm=2ec332b80f31a83b6435d60aa5f809e7c2c21698647deddcd9c145b1825a23b9&"},
+      {title:"Instagram", subtitle:"I post pictures of my ass daily. Follow me if you want to see them.<3", url:"https://www.instagram.com/hassan00x?igsh=MW52dWpkeHN0ZzY1dw%3D%3D&utm_source=qr", icon:"https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg"},
+      {title:"Telegram", subtitle:"That's your turn! You will send a picture of your ass now😈", url:"https://t.me/hassan00x", icon:"https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"},
+      {title:"Discord", subtitle:"if you're playin video games and want to play with me, this is my Discord ID (hassan00x), so add me. and also don't click on this link", url:"https://www.youtube.com/watch?v=LbL1ewFW62g", icon:"https://cdn.discordapp.com/attachments/698153490458869835/1442517805345013963/discord-icon.png?ex=6925b8e5&is=69246765&hm=7139091f1003f83706c2d527084237614044d5c6658b75f7f6d45ade1473d989&"},
+      {title:"Twitter/X", subtitle:"i repost some bullshit here.", url:"https://twitter.com/hassan00x/status/1581597417354297345?s=46&t=fi7ABNKTCYdhvggb9EriCw", icon:"https://cdn.discordapp.com/attachments/698153490458869835/1442525940717588651/twitter-icon-free-png.png?ex=6925c079&is=69246ef9&hm=0ba9bc1d4deae8decdfaf5c8059a6f2b2dcd02cd63af94ec3de50d67622e9e91&"},
+      {title:"Call or Message", subtitle:"You can call or message me at this number, but i won't answer. sry", url:"tel:+989210356647", icon:"https://cdn.discordapp.com/attachments/698153490458869835/1442514728206204970/phone_PNG48972.png?ex=6925b607&is=69246487&hm=a3aa69aae82d6f477d58ea563f631f31a3270b41dcbf169989b3b415a1dc8a86&"}
+    ];
+
+    document.getElementById('displayName').textContent = profile.name;
+    document.getElementById('subtitle').textContent = profile.subtitle;
+    document.querySelector('#avatar img').src = profile.avatar;
+
+    const container = document.getElementById('linksContainer');
+    links.forEach((l, i) => {
+      const a = document.createElement('a');
+      a.className = 'link-btn';
+      a.href = l.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.innerHTML = `
+        <div class="link-left" aria-hidden="true" style="background:linear-gradient(135deg, ${profile.accent1}22, ${profile.accent2}22);">
+          <img src="${l.icon}" alt="${l.title}">
+        </div>
+        <div style="flex:1">
+          <div class="link-title">${l.title}</div>
+          <div class="link-sub">${l.subtitle || ''}</div>
+        </div>
+      `;
+      a.addEventListener('click', (e) => {
+        const rect = a.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.left = (e.clientX - rect.left) + 'px';
+        ripple.style.top = (e.clientY - rect.top) + 'px';
+        ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+        a.appendChild(ripple);
+        setTimeout(()=> ripple.remove(), 700);
+      });
+
+      a.style.transform = 'translateY(20px)';
+      a.style.opacity = '0';
+      a.style.transition = `all 0.6s cubic-bezier(.18,.89,.32,1.28) ${(i*0.08)}s`;
+      container.appendChild(a);
+      setTimeout(()=>{
+        a.style.transform = 'translateY(0)';
+        a.style.opacity = '1';
+      }, 50);
+    });
+
+    window.addEventListener('load', () => {
+      setTimeout(()=> document.getElementById('card').classList.add('show'), 120);
+    });
+
+    const avatar = document.getElementById('avatar');
+    avatar.addEventListener('mousemove', (e)=>{
+      const r = avatar.getBoundingClientRect();
+      const cx = r.left + r.width/2;
+      const cy = r.top + r.height/2;
+      const dx = (e.clientX - cx) / r.width;
+      const dy = (e.clientY - cy) / r.height;
+      avatar.style.transform = `perspective(600px) rotateX(${ -dy * 6 }deg) rotateY(${ dx * 6 }deg) translateZ(4px)`;
+    });
+    avatar.addEventListener('mouseleave', ()=> avatar.style.transform = 'translateY(-6px)');
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Tab') document.body.classList.add('show-focus');
+    });
+  </script>
+</body>
+</html>
