@@ -28,21 +28,21 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* بک‌گراند ثابت */
+    
     .background {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
+      top: 0; left: 0; width: 100%; height: 200svh;
       background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent 8%),
                   radial-gradient(900px 500px at 90% 90%, rgba(6,182,212,0.08), transparent 10%),
                   linear-gradient(180deg,var(--bg1),var(--bg2));
       z-index: -1;
     }
 
-    /* کانتینر کارت */
+    
     .container {
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
@@ -251,3 +251,4 @@
   </script>
 </body>
 </html>
+
